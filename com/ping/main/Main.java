@@ -17,17 +17,18 @@ import com.ping.symbol.ExpList;
 import com.ping.symbol.Stm;
 import com.ping.table.Table;
 
+
 public class Main {
 
 	/*
-	 * 锟斤拷锟斤拷一锟斤拷全锟街的凤拷锟斤拷锟叫憋拷锟斤拷每一锟斤拷元锟截达拷锟斤拷一锟斤拷Table锟斤拷锟酵ｏ拷锟斤拷锟斤拷锟斤拷识锟斤拷锟斤拷锟斤拷锟街猴拷值
+	 * 定义一个全局的符号列表，每一个元素代表一个Table类型，包括标识符的名字和值
 	 */
 	public static List<Table> table_list = new ArrayList<Table>();
 
 	public static void main(String[] args) {
 
 		/*
-		 * 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟铰ｏ拷 a:=5+3; b:=(print(a,a-1),10*a); print(b);
+		 * 测试语句如下： a:=5+3; b:=(print(a,a-1),10*a); print(b);
 		 */
 		Stm prog = new CompoundStm(new AssignStm("a", new OpExp(new NumExp(5),
 				new NumExp(3), OpExp.Plus)), new CompoundStm(new AssignStm("b",
@@ -37,15 +38,15 @@ public class Main {
 						new NumExp(10), new IdExp("a"), OpExp.Times))),
 				new PrintStm(new LastExpList(new IdExp("b")))));
 		/*
-		 * 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫斤拷锟斤拷
+		 * 对上述定义的语句进行解析
 		 */
 		interpStm(prog);
 	}
 
 	/*
-	 * 锟斤拷锟斤拷锟斤拷锟戒，锟斤拷锟斤拷为Stm锟斤拷锟酵ｏ拷锟斤拷锟斤拷锟斤拷锟侥凤拷锟斤拷锟斤拷锟侥革拷锟洁。锟斤拷锟斤拷Java锟侥讹拷态锟斤拷
-	 * 1锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷为一锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷CompoundStm锟斤拷锟斤拷锟街憋拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫递癸拷锟斤拷锟斤拷
-	 * 2锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷为一锟斤拷锟斤拷值锟斤拷锟斤拷AssignStm锟斤拷锟斤拷锟斤拷锟饺硷拷锟斤拷锟斤拷锟斤拷锟斤拷式锟斤拷值锟斤拷锟斤拷锟揭斤拷锟斤拷
+	 * 解析语句，参数为Stm类型，是所有文法规则的父类。运用Java的多态性
+	 * 1、如果该语句为一个复合语句CompoundStm，则分别对其两个子语句进行递归解析
+	 * 2、如果该语句为一个赋值语句AssignStm，则首先计算出表达式的值，并且将该
 	 */
 	private static void interpStm(Stm s) {
 		Table table;
@@ -64,24 +65,24 @@ public class Main {
 	}
 
 	/*
-	 * 锟斤拷锟斤拷一锟斤拷锟斤拷锟斤拷式锟斤拷值锟斤拷默锟较革拷值锟斤拷为锟斤拷锟斤拷值锟斤拷 
-	 * 1锟斤拷锟斤拷锟斤拷锟矫憋拷锟斤拷式为一锟斤拷锟斤拷识锟斤拷锟斤拷锟酵★拷IdExp锟斤拷锟斤拷锟斤拷锟节凤拷锟脚憋拷锟斤拷锟揭碉拷锟矫憋拷识锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷值
-	 * 2锟斤拷锟斤拷锟斤拷锟矫憋拷锟斤拷式为一锟斤拷锟斤拷值锟斤拷锟酵★拷NumExp锟斤拷锟斤拷锟津返回革拷锟斤拷值锟斤拷锟斤拷
-	 * 3锟斤拷锟斤拷锟斤拷锟矫憋拷锟斤拷式为一锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷式锟斤拷OpExp锟斤拷锟斤拷锟斤拷锟街憋拷锟皆该憋拷锟斤拷式锟斤拷锟斤拷锟斤拷式锟斤拷锟斤拷锟斤拷式锟斤拷锟叫递癸拷锟斤拷锟姐，
-	 * 	    锟街憋拷锟斤拷锟斤拷锟斤拷锟斤拷式锟斤拷值left锟斤拷锟斤拷锟斤拷式锟斤拷值right锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷式锟斤拷值锟斤拷锟斤拷锟斤拷式锟斤拷值锟斤拷锟叫诧拷锟斤拷锟斤拷锟斤拷锟姐，锟斤拷锟襟返回斤拷锟斤拷
-	 * 4锟斤拷锟斤拷锟斤拷锟矫憋拷锟斤拷式为一锟斤拷锟斤拷锟斤拷锟斤拷锟戒，锟斤拷锟斤拷锟斤拷锟矫革拷锟斤拷锟斤拷锟斤拷锟斤拷前一锟斤拷Stm锟皆硷拷锟斤拷一锟斤拷Exp锟斤拷锟斤拷式锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷值也锟角革拷Exp锟斤拷锟斤拷式锟斤拷值
+	 * 返回一个表达式的值（默认该值都为整型值） 
+	 * 1、如果该表达式为一个标识符类型“IdExp”，则在符号表中找到该标识符并返回其值
+	 * 2、如果该表达式为一个数值类型“NumExp”，则返回该数值即可
+	 * 3、如果该表达式为一个运算表达式“OpExp”，则分别对该表达式的左子式和右子式进行递归运算，
+	 * 	    分别算出左子式的值left和右子式的值right，最后将左子式的值和右子式的值进行操作符运算，最后返回结果
+	 * 4、如果该表达式为一个复合语句，则解析该复合语句的前一个Stm以及后一个Exp表达式，并且最后该语句的值也是该Exp表达式的值
 	 */
 	private static int interpExp(Exp e) {
 		int result = 0;
 		if (e.kind.trim().equals("id_exp")) {
-			result = lookup(((IdExp) e).id);	//锟斤拷锟揭凤拷锟脚憋拷锟斤拷锟斤拷取锟矫憋拷识锟斤拷锟斤拷值
+			result = lookup(((IdExp) e).id);	//查找符号表，获取该标识符的值
 		} else if (e.kind.trim().equals("num_exp")) {
-			result = ((NumExp) e).num;	//直锟接凤拷锟截革拷锟斤拷值
+			result = ((NumExp) e).num;	//直接返回该数值
 		} else if (e.kind.trim().equals("op_exp")) {
 			OpExp op_exp = (OpExp) e;
-			int left = interpExp(op_exp.left);	//锟斤拷锟斤拷锟斤拷式锟捷癸拷锟斤拷锟矫ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷式锟斤拷值锟斤拷值锟斤拷锟斤拷锟酵憋拷锟斤拷left
-			int right = interpExp(op_exp.right);	//锟斤拷锟斤拷锟斤拷式锟捷癸拷锟斤拷锟矫ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷式锟斤拷值锟斤拷值锟斤拷锟斤拷锟酵憋拷锟斤拷right
-			switch (op_exp.oper) {	//OpExp锟斤拷锟叫讹拷锟斤拷锟剿革拷锟斤拷锟斤拷锟斤拷锟斤拷锟侥撅拷态锟斤拷锟斤拷锟斤拷值锟斤拷1锟斤拷锟斤拷锟斤拷+锟斤拷锟姐；2锟斤拷锟斤拷锟斤拷-锟斤拷锟姐；3锟斤拷锟斤拷锟斤拷*锟斤拷锟姐；4锟斤拷锟斤拷锟斤拷/锟斤拷锟斤拷
+			int left = interpExp(op_exp.left);	//对左子式递归调用，计算出左子式的值赋值给整型变量left
+			int right = interpExp(op_exp.right);	//对右子式递归调用，计算出右子式的值赋值给整型变量right
+			switch (op_exp.oper) {	//OpExp类中定义了各个操作符的静态整型数值；1：代表+运算；2：代表-运算；3：代表*运算；4：代表/运算
 			case 1:
 				result = left + right;
 				break;
@@ -95,18 +96,18 @@ public class Main {
 				result = left / right;
 				break;
 			default:
-				System.out.println("锟斤拷锟斤拷锟斤拷锟襟！ｏ拷");	//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟较碉拷锟侥革拷锟斤拷锟斤拷锟斤拷印锟斤拷锟斤拷锟斤拷息
+				System.out.println("操作错误！！");	//如果操作符非以上的四个，则打印出错信息
 			}
 		} else if (e.kind.trim().equals("eseq_exp")) {
-			interpStm(((EseqExp) e).stm);	//锟饺斤拷锟斤拷前一锟斤拷Stm锟斤拷锟斤拷
-			result = interpExp(((EseqExp) e).exp);	//锟斤拷锟斤拷锟斤拷锟斤拷锟侥憋拷锟斤拷式值锟斤拷锟斤拷锟截革拷值为锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷值
+			interpStm(((EseqExp) e).stm);	//先解析前一个Stm语句
+			result = interpExp(((EseqExp) e).exp);	//计算后面的表达式值，返回该值为整个语句的最后值
 		}
 		return result;
 	}
 
 	/*
-	 * 锟斤拷锟斤拷锟斤拷锟脚憋拷table_list,锟斤拷锟揭凤拷锟脚憋拷锟叫讹拷应锟斤拷锟斤拷为锟截硷拷锟斤拷key锟侥憋拷识锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟脚憋拷锟叫达拷锟节该憋拷识锟斤拷锟斤拷锟津返回该憋拷识锟斤拷锟斤拷值
-	 * 锟斤拷锟斤拷锟斤拷锟脚憋拷锟叫诧拷锟斤拷锟节该憋拷识锟斤拷锟斤拷锟斤拷锟斤拷印锟斤拷锟斤拷锟斤拷息
+	 * 遍历符号表table_list,查找符号表中对应名称为关键字key的标识符，如果符号表中存在该标识符，则返回该标识符的值
+	 * 如果符号表中不存在该标识符，则打印错误信息
 	 */
 	private static int lookup(String key) {
 		for (int i = 0; i < table_list.size(); i++) {
@@ -114,7 +115,7 @@ public class Main {
 				return table_list.get(i).value;
 			}
 		}
-		System.out.println("锟揭诧拷锟斤拷锟斤拷值锟斤拷锟斤拷");
+		System.out.println("找不到该值！！");
 		return 0;
 	}
 

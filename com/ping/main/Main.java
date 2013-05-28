@@ -17,7 +17,6 @@ import com.ping.symbol.ExpList;
 import com.ping.symbol.Stm;
 import com.ping.table.Table;
 
-//hhh
 public class Main {
 
 	/*
@@ -46,21 +45,22 @@ public class Main {
 	/*
 	 * 解析语句，参数为Stm类型，是所有文法规则的父类。运用Java的多态性
 	 * 1、如果该语句为一个复合语句CompoundStm，则分别对其两个子语句进行递归解析
-	 * 2、如果该语句为一个赋值语句AssignStm，则首先计算出表达式的值，并且将该
+	 * 2、如果该语句为一个赋值语句AssignStm，则首先计算出表达式的值，并且将该值赋值给左标识符
+	 * 3、如果该语句为一个打印语句PrintStm，则打印出语句中的对应表达式的值
 	 */
 	private static void interpStm(Stm s) {
 		Table table;
 		if (s.kind.trim().equals("compound_stm")) {
 			CompoundStm c_stm = (CompoundStm) s;
-			interpStm(c_stm.stm1);
-			interpStm(c_stm.stm2);
+			interpStm(c_stm.stm1);	//递归解析左语句
+			interpStm(c_stm.stm2);	//递归解析右语句
 		} else if (s.kind.trim().equals("assign_stm")) {
 			AssignStm a_stm = (AssignStm) s;
-			int result = interpExp(a_stm.exp);
-			table = new Table(a_stm.id, result);
+			int result = interpExp(a_stm.exp);	//计算出表达式的值
+			table = new Table(a_stm.id, result);	//通过新建一个Table对象，将该标识符以及值添加到标识符列表中
 			table_list.add(table);
 		} else if (s.kind.trim().equals("print_stm")) {
-			interpExpList(((PrintStm) s).exps);
+			interpExpList(((PrintStm) s).exps);	//打印
 		}
 	}
 
@@ -119,16 +119,21 @@ public class Main {
 		return 0;
 	}
 
+	/*
+	 * 打印语句中的表达式对应的值
+	 * 1、如果打印列表为复合表达式，则先计算出复合表达式头的具体值，然后进行打印，再次对后续表达式进行递归打印，直到最后一个表达式为单一表达式类型
+	 * 2、如果打印列表为单一表达式，则计算出该表达式的值，进行打印，退出即可
+	 */
 	private static void interpExpList(ExpList exps) {
 		int print;
 		if (exps.kind.trim().equals("pair_explist")) {
 			PairExpList p_explist = (PairExpList) exps;
-			print = interpExp(p_explist.head);
+			print = interpExp(p_explist.head);	//计算出表达式的值
 			System.out.println("print:" + print);
-			interpExpList(p_explist.tail);
+			interpExpList(p_explist.tail);	//对后续表达式进行递归打印
 		} else if (exps.kind.trim().equals("last_explist")) {
 			LastExpList l_explist = (LastExpList) exps;
-			print = interpExp(l_explist.head);
+			print = interpExp(l_explist.head);	//计算出表达式的值
 			System.out.println("print:" + print);
 		}
 	}
